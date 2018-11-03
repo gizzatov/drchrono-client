@@ -16,8 +16,17 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
+from django.views.generic import TemplateView
+
+from application.apps.oauth.views import AuthView
+from application.apps.patients.views import PatientView
 
 urlpatterns = [
+    path('', PatientView.as_view()),
+    path('login/', AuthView.as_view(), name='login'),
+    path('error/', TemplateView.as_view(template_name="error.html"), name='error_info'),
+
     path('admin/', admin.site.urls),
+    path('', include('social_django.urls', namespace='social')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

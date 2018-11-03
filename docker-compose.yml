@@ -17,16 +17,19 @@ services:
       - "3000:8000"
     volumes:
       - ./drchrono:/app
-    command: bash -c "python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     working_dir: /app
+    stdin_open: true
+    tty: true
     environment:
-      ENV_NAME: Development
+      DJANGO_SETTINGS_MODULE: application.settings.local_dev
       PG_USER: postgres
       PG_PASSWORD: postgres
       PG_HOST: db
       PG_PORT: 5432
       PG_DB: drchrono
-      DJANGO_SETTINGS_MODULE: 'application.settings.local_dev'
+      SOCIAL_AUTH_DRCHRONO_KEY: fake_key
+      SOCIAL_AUTH_DRCHRONO_SECRET: fake_secret
     links:
       - db
     depends_on:

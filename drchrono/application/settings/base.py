@@ -37,6 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'social_django',
+
+    'application.apps.patients',
+    'application.apps.oauth',
 ]
 
 MIDDLEWARE = [
@@ -47,14 +51,18 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'application.apps.oauth.middlewares.CustomSocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'application.urls'
 
+BASE_TEMPLATE_DIR = BASE_DIR + '/templates/'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_TEMPLATE_DIR,
+            ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -62,6 +70,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -123,3 +133,19 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
+
+
+# Python Social Auth settings
+SOCIAL_AUTH_POSTGRES_JSONFIELD = True
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/error/'
+SOCIAL_AUTH_RAISE_EXCEPTIONS = False
+SOCIAL_AUTH_DRCHRONO_KEY = os.getenv('SOCIAL_AUTH_DRCHRONO_KEY')
+SOCIAL_AUTH_DRCHRONO_SECRET = os.getenv('SOCIAL_AUTH_DRCHRONO_SECRET')
+
+
+AUTHENTICATION_BACKENDS = (
+    'application.apps.oauth.backends.DrchronoOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
