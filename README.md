@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/gizzatov/drchrono-client.svg?style=svg)](https://circleci.com/gh/gizzatov/drchrono-client)
+
 # About
 This is a simple implementation of web-client example for drchrono based on Django.
 
