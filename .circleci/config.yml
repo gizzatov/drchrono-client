@@ -7,22 +7,20 @@ jobs:
   build:
     working_directory: ~/app
     docker:
-      - image: circleci/python:3.6
+      - image: python:3.6.4
         environment:
           DJANGO_SETTINGS_MODULE: application.settings.base
-          PG_USER: ubuntu
-          PG_PASSWORD: ""
+          PG_USER: postgres
+          PG_PASSWORD: postgres
           PG_HOST: localhost
           PG_PORT: 5432
           PG_DB: drchrono
           SOCIAL_AUTH_DRCHRONO_KEY: fake_key
           SOCIAL_AUTH_DRCHRONO_SECRET: fake_secret
           
-      - image: circleci/9.6
+      - image: postgres:9.5-alpine
         environment:
-          POSTGRES_USER: ubuntu
           POSTGRES_DB: drchrono
-          POSTGRES_PASSWORD: ""
 
     steps:
       - checkout
@@ -48,9 +46,9 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
+            cd drchrono
             python manage.py test
 
       - store_artifacts:
           path: test-reports
           destination: test-reports
-          
