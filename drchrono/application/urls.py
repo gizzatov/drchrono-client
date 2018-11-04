@@ -23,7 +23,7 @@ from application.apps.oauth.views import AuthView
 from application.apps.patients.views import PatientView
 
 urlpatterns = [
-    path('', PatientView.as_view()),
+    path('', PatientView.as_view(), name='patient_list'),
     path('login/', AuthView.as_view(), name='login'),
     path('error/', TemplateView.as_view(template_name="error.html"), name='error_info'),
 

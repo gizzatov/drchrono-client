@@ -2,6 +2,9 @@ Django==2.1.2
 psycopg2==2.7.5
 uWSGI==2.0.17.1
 social-auth-app-django==3.1.0
+django-model-utils==3.1.2
+django-redis==4.9.0
 
 httpretty==0.9.5
 unittest2==1.1.0
+fakeredis==0.14.0

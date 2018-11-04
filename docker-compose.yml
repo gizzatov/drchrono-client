@@ -10,6 +10,11 @@ services:
     logging:
       driver: none
 
+  redis:
+    image: redis:3.2-alpine
+    ports:
+      - "6379:6379"
+
   client:
     build:
       context: .
@@ -28,9 +33,13 @@ services:
       PG_HOST: db
       PG_PORT: 5432
       PG_DB: drchrono
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
       SOCIAL_AUTH_DRCHRONO_KEY: fake_key
       SOCIAL_AUTH_DRCHRONO_SECRET: fake_secret
     links:
       - db
+      - redis
     depends_on:
       - db
+      - redis

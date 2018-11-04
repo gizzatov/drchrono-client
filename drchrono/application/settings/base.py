@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -149,3 +150,22 @@ AUTHENTICATION_BACKENDS = (
     'application.apps.oauth.backends.DrchronoOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': f'redis://{os.getenv("REDIS_HOST")}:{os.getenv("REDIS_PORT", 6379)}/',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
+DRCHRONO_PATIENTS_CACHE_TTL = 180
+DRCHRONO_PATIENTS_CACHE_KEY = 'drchrono_patients_sycned_at'
+
+
+TESTING = 'test' in sys.argv or 'jenkins' in sys.argv
+
+if TESTING:
+    CACHES['default']['OPTIONS']['REDIS_CLIENT_CLASS'] = 'fakeredis.FakeStrictRedis'
